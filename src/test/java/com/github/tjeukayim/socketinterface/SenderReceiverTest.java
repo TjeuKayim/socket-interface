@@ -2,33 +2,46 @@ package com.github.tjeukayim.socketinterface;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 
 public final class SenderReceiverTest {
 
   @Test
-  void sendHello() {
+  void sender() {
+    Protocol p = MessageSender.create(Protocol.class, System.out::println);
+    p.chat().chat("Hello World", true);
+  }
+
+  @Test
+  void chat() {
     ProtocolMock protocolMock = new ProtocolMock();
-    MessageReceiver<ProtocolMock> receiver = new MessageReceiver<>(protocolMock);
+    MessageReceiver receiver = new MessageReceiver(protocolMock);
     Protocol sender = MessageSender.create(Protocol.class, receiver::receive);
-    sender.hello();
   }
 
   static class ProtocolMock implements Protocol {
 
     @Override
-    public void hello() {
-      System.out.println("hello");
+    public Account account() {
+      return new Account() {
+        @Override
+        public void login(Login f) {
+
+        }
+
+        @Override
+        public void logout() {
+
+        }
+      };
     }
 
     @Override
-    public void chat(String message) {
+    public Chat chat() {
+      return (message, dateTime) -> {
 
-    }
-
-    @Override
-    public void login(Login f) {
-
+      };
     }
   }
 }

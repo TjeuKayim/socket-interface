@@ -9,7 +9,8 @@ public class MessageReceiver {
 
   private final HashMap<String, Class> interfaces = new HashMap<>();
 
-  public MessageReceiver(Class clazz) {
+  public MessageReceiver(Object obj) {
+    Class clazz = obj.getClass();
     Method[] declaredMethods = clazz.getDeclaredMethods();
     for (Method method : declaredMethods) {
       if (method.getParameterCount() != 0) {
@@ -33,7 +34,7 @@ public class MessageReceiver {
     if (!name.isPresent()) {
       throw new IllegalArgumentException("Cannot find interface");
     }
-
+    return this;
   }
 
   private static class TargetClass<T> {
