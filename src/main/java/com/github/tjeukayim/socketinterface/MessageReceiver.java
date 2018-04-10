@@ -9,9 +9,8 @@ public class MessageReceiver {
   private final HashMap<String, Endpoint> endpoints = new HashMap<>();
   private final Object target;
 
-  public MessageReceiver(Object target) {
+  public MessageReceiver(Class<?> clazz, Object target) {
     this.target = target;
-    Class clazz = target.getClass();
     Method[] declaredMethods = clazz.getMethods();
     for (Method method : declaredMethods) {
       if (method.getParameterCount() != 0) {
