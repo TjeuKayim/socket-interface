@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 /**
  * Implements an interface and proxy invocations to a messageConsumer
  */
-public final class MessageSender {
+public class MessageSender {
   private final HashMap<String, Object> endpoints = new HashMap<>();
   private final Class clazz;
   private final Consumer<Message> messageConsumer;
@@ -37,7 +37,7 @@ public final class MessageSender {
     if (!clazz.isInterface()) {
       throw new IllegalArgumentException("clazz should be an interface");
     }
-    for (Method method : clazz.getDeclaredMethods()) {
+    for (Method method : clazz.getMethods()) {
       Class<?> returnType = method.getReturnType();
       if (!returnType.isInterface()) {
         throw new IllegalArgumentException("clazz methods should return an interface");
