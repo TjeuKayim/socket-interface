@@ -1,5 +1,7 @@
 package com.github.tjeukayim.socketinterface;
 
+import java.util.Objects;
+
 public interface Account {
   void login(Login f);
   void logout();
@@ -28,6 +30,26 @@ public interface Account {
 
     public String getPassword() {
       return password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (o == null || getClass() != o.getClass()) {
+        return false;
+      }
+      Login login = (Login) o;
+      return id == login.id &&
+          Objects.equals(name, login.name) &&
+          Objects.equals(password, login.password);
+    }
+
+    @Override
+    public int hashCode() {
+
+      return Objects.hash(id, name, password);
     }
   }
 }
