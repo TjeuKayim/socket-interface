@@ -1,29 +1,28 @@
 package com.github.tjeukayim.socketinterface;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
+/**
+ * Implements an interface and proxy invocations to a messageConsumer
+ */
 public final class MessageSender {
-
-  private static final Gson gson = new Gson();
-  private final HashMap<String, Object> implementations = new HashMap<>();
+  private final HashMap<String, Object> endpoints = new HashMap<>();
   private final Class clazz;
-  private final Consumer<String> consumer;
+  private final Consumer<Message> messageConsumer;
 
-  private MessageSender(Class clazz, Consumer<String> consumer) {
+  private MessageSender(Class clazz, Consumer<Message> messageConsumer) {
     this.clazz = clazz;
-    this.consumer = consumer;
+    this.messageConsumer = messageConsumer;
     createImplementations();
   }
 
   @SuppressWarnings("unchecked")
-  public static <T> T create(Class<T> clazz, Consumer<String> consumer) {
-    MessageSender messageSender = new MessageSender(clazz, consumer);
+  public static <T> T create(Class<T> clazz, Consumer<Message> messageConsumer) {
+    MessageSender messageSender = new MessageSender(clazz, messageConsumer);
     return (T) messageSender.getProxy();
   }
 
@@ -44,32 +43,27 @@ public final class MessageSender {
         throw new IllegalArgumentException("clazz methods should return an interface");
       }
       if (method.getParameterCount() != 0) {
-        throw new IllegalArgumentException("clazz methods shouldn't have parameters");
+        throw new IllegalArgumentException("clazz methods shouldn't have arguments");
       }
-      String interfaceName = method.getName();
+      String endpoint = method.getName();
       Object implementation = interfaceProxy(returnType,
-          (o, m, args) -> invocationHandler(interfaceName, m, args));
-      implementations.put(interfaceName, implementation);
+          (o, m, args) -> invocationHandler(endpoint, m, args));
+      endpoints.put(endpoint, implementation);
     }
   }
 
-  private Object invocationHandler(String interfaceName, Method method, Object[] args) {
+  private Object invocationHandler(String endpoint, Method method, Object[] args) {
     if (!method.getReturnType().equals(Void.TYPE)) {
       throw new UnsupportedOperationException("return type should be void");
     }
     // Send message
-    String name = interfaceName + "/" + method.getName();
-    JsonArray message = new JsonArray();
-    message.add(name);
-    for (Object arg : args) {
-      message.add(gson.toJsonTree(arg));
-    }
-    consumer.accept(gson.toJson(message));
+    Message message = new Message(endpoint, method.getName(), args);
+    messageConsumer.accept(message);
     return null;
   }
 
   private Object getProxy() {
     return interfaceProxy(clazz, (proxy, method, args) ->
-        implementations.get(method.getName()));
+        endpoints.get(method.getName()));
   }
 }
