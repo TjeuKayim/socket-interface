@@ -39,12 +39,10 @@ public class MessageSender {
     }
     for (Method method : clazz.getMethods()) {
       Class<?> returnType = method.getReturnType();
-      if (!returnType.isInterface()) {
-        throw new IllegalArgumentException("clazz methods should return an interface");
-      }
       if (method.getParameterCount() != 0) {
         throw new IllegalArgumentException("clazz methods shouldn't have arguments");
       }
+      validateEndpoint(returnType);
       String endpoint = method.getName();
       Object implementation = interfaceProxy(returnType,
           (o, m, args) -> invocationHandler(endpoint, m, args));
@@ -53,9 +51,6 @@ public class MessageSender {
   }
 
   private Object invocationHandler(String endpoint, Method method, Object[] args) {
-    if (!method.getReturnType().equals(Void.TYPE)) {
-      throw new UnsupportedOperationException("return type should be void");
-    }
     // Send message
     Message message = new Message(endpoint, method.getName(), args);
     messageConsumer.accept(message);
@@ -65,5 +60,16 @@ public class MessageSender {
   private Object getProxy() {
     return interfaceProxy(clazz, (proxy, method, args) ->
         endpoints.get(method.getName()));
+  }
+
+  private void validateEndpoint(Class endpoint) {
+    if (!endpoint.isInterface()) {
+      throw new IllegalArgumentException("clazz methods should return an interface");
+    }
+    for (Method method : endpoint.getMethods()) {
+      if (!method.getReturnType().equals(Void.TYPE)) {
+        throw new IllegalArgumentException("return type should be void");
+      }
+    }
   }
 }
