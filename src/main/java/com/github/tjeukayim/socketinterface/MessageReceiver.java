@@ -38,6 +38,8 @@ public class MessageReceiver {
           .invoke(implementation, message.getArguments());
     } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       throw new IllegalArgumentException("invocation failed");
+    } catch (NullPointerException e) {
+      throw new IllegalStateException("call to " + message.getEndpoint() + " returned null");
     }
   }
 
