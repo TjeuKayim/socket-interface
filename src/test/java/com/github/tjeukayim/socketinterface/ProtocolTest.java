@@ -49,7 +49,14 @@ public final class ProtocolTest {
 
   @Test
   void invalidMessage() {
-    receiver.receive(new Message("this", "does", "not", "exist"));
+    Message m = new Message("this", "does", "not", "exist");
+    assertThrows(IllegalArgumentException.class, () -> receiver.receive(m));
+  }
+
+  @Test
+  void missingEndpoint() {
+    protocolMock.account = null;
+    assertThrows(IllegalStateException.class, () -> sender.account().logout());
   }
 
   private <T> Consumer<T> print(Consumer<T> consumer) {
@@ -65,6 +72,21 @@ public final class ProtocolTest {
     Boolean bool;
     boolean loggedOut = false;
     Login login;
+    private Account account;
+
+    ProtocolMock() {
+      account = new Account() {
+        @Override
+        public void logout() {
+          loggedOut = true;
+        }
+
+        @Override
+        public void login(Login f) {
+          login = f;
+        }
+      };
+    }
 
     @Override
     public Chat chat() {
@@ -76,17 +98,7 @@ public final class ProtocolTest {
 
     @Override
     public Account account() {
-      return new Account() {
-        @Override
-        public void logout() {
-          loggedOut = true;
-        }
-
-        @Override
-        public void login(Login f) {
-          login = f;
-        }
-      };
+      return account;
     }
   }
 }
