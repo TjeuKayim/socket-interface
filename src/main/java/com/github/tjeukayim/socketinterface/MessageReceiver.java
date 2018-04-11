@@ -3,6 +3,7 @@ package com.github.tjeukayim.socketinterface;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.function.Function;
 
 public class MessageReceiver {
 
@@ -22,11 +23,19 @@ public class MessageReceiver {
   }
 
   public void receive(Message message) {
+    receive(message, null);
+  }
+
+  public void receive(Message message, Function<Class<?>[], Object[]> argumentParser) {
     Endpoint endpoint = endpoints.get(message.getEndpoint());
     if (endpoint == null) {
       throw new IllegalArgumentException("endpoint does not exist");
     }
     Class<?>[] parameterTypes = endpoint.getParameterTypes(message.getMethod());
+    if (argumentParser != null) {
+      Object[] arguments = argumentParser.apply(parameterTypes);
+      message.setArguments(arguments);
+    }
     if (parameterTypes == null) {
       throw new IllegalArgumentException("method does not exist");
     }

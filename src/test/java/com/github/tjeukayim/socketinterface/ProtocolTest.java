@@ -48,6 +48,17 @@ public final class ProtocolTest {
   }
 
   @Test
+  void argumentParser() {
+    Message message = new Message("chat", "chat", (Object[]) null);
+    receiver.receive(message, types -> {
+      assertArrayEquals(types, new Class[] {String.class, Boolean.TYPE});
+      return new Object[] {"Hello World", true};
+    });
+    assertEquals("Hello World", protocolMock.message);
+    assertEquals(true, protocolMock.bool);
+  }
+
+  @Test
   void invalidMessage() {
     Message m = new Message("this", "does", "not", "exist");
     assertThrows(IllegalArgumentException.class, () -> receiver.receive(m));
