@@ -14,9 +14,10 @@ public final class ProtocolTest {
   private static final Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
   private ProtocolMock protocolMock;
   private Protocol sender;
+  private MessageReceiver receiver;
 
   private Protocol createSender(Protocol protocol) {
-    MessageReceiver receiver = new MessageReceiver(Protocol.class, protocol);
+    receiver = new MessageReceiver(Protocol.class, protocol);
     return MessageSender.create(Protocol.class, print(receiver::receive));
   }
 
@@ -44,6 +45,11 @@ public final class ProtocolTest {
     Login login = new Login(3, "Henkie", "myPassword");
     sender.account().login(login);
     assertEquals(login, protocolMock.login);
+  }
+
+  @Test
+  void invalidMessage() {
+    receiver.receive(new Message("this", "does", "not", "exist"));
   }
 
   private <T> Consumer<T> print(Consumer<T> consumer) {
