@@ -9,12 +9,12 @@ import java.util.function.Consumer;
 /**
  * Implements an interface and proxy invocations to a messageConsumer
  */
-public class MessageSender {
+public class SocketSender {
   private final HashMap<String, Object> endpoints = new HashMap<>();
   private final Class clazz;
   private final Consumer<SocketMessage> messageConsumer;
 
-  private MessageSender(Class clazz, Consumer<SocketMessage> messageConsumer) {
+  private SocketSender(Class clazz, Consumer<SocketMessage> messageConsumer) {
     this.clazz = clazz;
     this.messageConsumer = messageConsumer;
     createImplementations();
@@ -22,8 +22,8 @@ public class MessageSender {
 
   @SuppressWarnings("unchecked")
   public static <T> T create(Class<T> clazz, Consumer<SocketMessage> messageConsumer) {
-    MessageSender messageSender = new MessageSender(clazz, messageConsumer);
-    return (T) messageSender.getProxy();
+    SocketSender sender = new SocketSender(clazz, messageConsumer);
+    return (T) sender.getProxy();
   }
 
   private static Object interfaceProxy(Class c, InvocationHandler h) {

@@ -14,11 +14,11 @@ public final class ProtocolTest {
   private static final Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
   private ProtocolMock protocolMock;
   private Protocol sender;
-  private MessageReceiver receiver;
+  private SocketReceiver receiver;
 
   private Protocol createSender(Protocol protocol) {
-    receiver = new MessageReceiver(Protocol.class, protocol);
-    return MessageSender.create(Protocol.class, print(receiver::receive));
+    receiver = new SocketReceiver(Protocol.class, protocol);
+    return SocketSender.create(Protocol.class, print(receiver::receive));
   }
 
   @BeforeEach

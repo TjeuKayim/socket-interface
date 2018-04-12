@@ -13,7 +13,7 @@ public class InvalidProtocolTest {
   @Test
   void noInterface() {
     assertThrows(IllegalArgumentException.class, () ->
-        MessageSender.create(String.class, consumerMock));
+        SocketSender.create(String.class, consumerMock));
   }
 
   interface A {
@@ -24,7 +24,7 @@ public class InvalidProtocolTest {
   @Test
   void returnVoid() {
     assertThrows(IllegalArgumentException.class, () ->
-        MessageSender.create(A.class, consumerMock));
+        SocketSender.create(A.class, consumerMock));
   }
 
   interface B {
@@ -40,6 +40,6 @@ public class InvalidProtocolTest {
   @Test
   void invalidEndpoint() {
     assertThrows(IllegalArgumentException.class, () ->
-        MessageSender.create(B.class, consumerMock));
+        SocketSender.create(B.class, consumerMock));
   }
 }

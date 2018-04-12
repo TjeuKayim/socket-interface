@@ -5,12 +5,12 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.function.Function;
 
-public class MessageReceiver {
+public class SocketReceiver {
 
   private final HashMap<String, Endpoint> endpoints = new HashMap<>();
   private final Object target;
 
-  public MessageReceiver(Class<?> clazz, Object target) {
+  public SocketReceiver(Class<?> clazz, Object target) {
     this.target = target;
     Method[] declaredMethods = clazz.getMethods();
     for (Method method : declaredMethods) {
