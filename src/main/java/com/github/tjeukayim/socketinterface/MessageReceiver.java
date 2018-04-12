@@ -22,11 +22,11 @@ public class MessageReceiver {
     }
   }
 
-  public void receive(Message message) {
+  public void receive(SocketMessage message) {
     receive(message, null);
   }
 
-  public void receive(Message message, Function<Class<?>[], Object[]> argumentParser) {
+  public void receive(SocketMessage message, Function<Class<?>[], Object[]> argumentParser) {
     Endpoint endpoint = endpoints.get(message.getEndpoint());
     if (endpoint == null) {
       throw new IllegalArgumentException("endpoint does not exist");

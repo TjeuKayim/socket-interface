@@ -49,7 +49,7 @@ public final class ProtocolTest {
 
   @Test
   void argumentParser() {
-    Message message = new Message("chat", "chat", (Object[]) null);
+    SocketMessage message = new SocketMessage("chat", "chat", (Object[]) null);
     receiver.receive(message, types -> {
       assertArrayEquals(types, new Class[] {String.class, Boolean.TYPE});
       return new Object[] {"Hello World", true};
@@ -60,7 +60,7 @@ public final class ProtocolTest {
 
   @Test
   void invalidMessage() {
-    Message m = new Message("this", "does", "not", "exist");
+    SocketMessage m = new SocketMessage("this", "does", "not", "exist");
     assertThrows(IllegalArgumentException.class, () -> receiver.receive(m));
   }
 

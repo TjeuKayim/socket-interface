@@ -1,11 +1,11 @@
 package com.github.tjeukayim.socketinterface;
 
-public class Message {
+public class SocketMessage {
   private final String endpoint;
   private final String method;
   private final Object[] arguments;
 
-  public Message(String endpoint, String method, Object... arguments) {
+  public SocketMessage(String endpoint, String method, Object... arguments) {
     this.endpoint = endpoint;
     this.method = method;
     this.arguments = arguments;

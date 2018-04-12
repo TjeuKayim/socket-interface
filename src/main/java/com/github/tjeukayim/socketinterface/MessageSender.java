@@ -12,16 +12,16 @@ import java.util.function.Consumer;
 public class MessageSender {
   private final HashMap<String, Object> endpoints = new HashMap<>();
   private final Class clazz;
-  private final Consumer<Message> messageConsumer;
+  private final Consumer<SocketMessage> messageConsumer;
 
-  private MessageSender(Class clazz, Consumer<Message> messageConsumer) {
+  private MessageSender(Class clazz, Consumer<SocketMessage> messageConsumer) {
     this.clazz = clazz;
     this.messageConsumer = messageConsumer;
     createImplementations();
   }
 
   @SuppressWarnings("unchecked")
-  public static <T> T create(Class<T> clazz, Consumer<Message> messageConsumer) {
+  public static <T> T create(Class<T> clazz, Consumer<SocketMessage> messageConsumer) {
     MessageSender messageSender = new MessageSender(clazz, messageConsumer);
     return (T) messageSender.getProxy();
   }
@@ -52,7 +52,7 @@ public class MessageSender {
 
   private Object invocationHandler(String endpoint, Method method, Object[] args) {
     // Send message
-    Message message = new Message(endpoint, method.getName(), args);
+    SocketMessage message = new SocketMessage(endpoint, method.getName(), args);
     messageConsumer.accept(message);
     return null;
   }

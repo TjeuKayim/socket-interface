@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 public class InvalidProtocolTest {
 
-  private Consumer<Message> consumerMock = m -> {
+  private Consumer<SocketMessage> consumerMock = m -> {
   };
 
   @Test
