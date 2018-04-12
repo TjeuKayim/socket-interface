@@ -31,20 +31,21 @@ public class MessageReceiver {
     if (endpoint == null) {
       throw new IllegalArgumentException("endpoint does not exist");
     }
-    Class<?>[] parameterTypes = endpoint.getParameterTypes(message.getMethod());
-    if (argumentParser != null) {
-      Object[] arguments = argumentParser.apply(parameterTypes);
-      message.setArguments(arguments);
-    }
+    String method = message.getMethod();
+    Class<?>[] parameterTypes = endpoint.getParameterTypes(method);
     if (parameterTypes == null) {
       throw new IllegalArgumentException("method does not exist");
+    }
+    Object[] arguments = message.getArguments();
+    if (argumentParser != null) {
+      arguments = argumentParser.apply(parameterTypes);
     }
     try {
       // Get implementation of endpoint, and invoke the requested method
       Object implementation = endpoint.getFactory().invoke(target, (Object[]) null);
       implementation.getClass()
-          .getMethod(message.getMethod(), parameterTypes)
-          .invoke(implementation, message.getArguments());
+          .getMethod(method, parameterTypes)
+          .invoke(implementation, arguments);
     } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       throw new IllegalArgumentException("invocation failed");
     } catch (NullPointerException e) {

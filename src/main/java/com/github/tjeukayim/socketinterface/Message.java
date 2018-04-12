@@ -3,7 +3,7 @@ package com.github.tjeukayim.socketinterface;
 public class Message {
   private final String endpoint;
   private final String method;
-  private Object[] arguments;
+  private final Object[] arguments;
 
   public Message(String endpoint, String method, Object... arguments) {
     this.endpoint = endpoint;
@@ -21,9 +21,5 @@ public class Message {
 
   public Object[] getArguments() {
     return arguments;
-  }
-
-  public void setArguments(Object[] arguments) {
-    this.arguments = arguments;
   }
 }
