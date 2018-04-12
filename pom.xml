@@ -6,7 +6,7 @@
 
   <groupId>com.github.tjeukayim</groupId>
   <artifactId>socket-interface</artifactId>
-  <version>0.1</version>
+  <version>0.3</version>
 
   <properties>
     <maven.compiler.source>1.9</maven.compiler.source>
