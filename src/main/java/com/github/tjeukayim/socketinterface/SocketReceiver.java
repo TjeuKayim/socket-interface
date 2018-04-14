@@ -31,8 +31,8 @@ public class SocketReceiver {
     if (endpoint == null) {
       throw new IllegalArgumentException("endpoint does not exist");
     }
-    String method = message.getMethod();
-    Class<?>[] parameterTypes = endpoint.getParameterTypes(method);
+    String methodName = message.getMethod();
+    Class<?>[] parameterTypes = endpoint.getParameterTypes(methodName);
     if (parameterTypes == null) {
       throw new IllegalArgumentException("method does not exist");
     }
@@ -43,9 +43,10 @@ public class SocketReceiver {
     try {
       // Get implementation of endpoint, and invoke the requested method
       Object implementation = endpoint.getFactory().invoke(target, (Object[]) null);
-      implementation.getClass()
-          .getMethod(method, parameterTypes)
-          .invoke(implementation, arguments);
+      Method method = implementation.getClass()
+          .getMethod(methodName, parameterTypes);
+      method.setAccessible(true);
+      method.invoke(implementation, arguments);
     } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       throw new IllegalArgumentException("invocation failed");
     } catch (NullPointerException e) {
