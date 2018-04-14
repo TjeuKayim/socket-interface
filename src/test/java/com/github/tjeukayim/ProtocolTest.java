@@ -1,8 +1,11 @@
-package com.github.tjeukayim.socketinterface;
+package com.github.tjeukayim;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.github.tjeukayim.socketinterface.Account.Login;
+import com.github.tjeukayim.Account.Login;
+import com.github.tjeukayim.socketinterface.SocketMessage;
+import com.github.tjeukayim.socketinterface.SocketReceiver;
+import com.github.tjeukayim.socketinterface.SocketSender;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.util.function.Consumer;

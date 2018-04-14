@@ -1,4 +1,4 @@
-package com.github.tjeukayim.socketinterface;
+package com.github.tjeukayim;
 
 import java.time.LocalDateTime;
 

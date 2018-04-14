@@ -1,4 +1,4 @@
-package com.github.tjeukayim.socketinterface;
+package com.github.tjeukayim;
 
 /**
  * The interface used in unit-tests

@@ -1,7 +1,9 @@
-package com.github.tjeukayim.socketinterface;
+package com.github.tjeukayim;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.tjeukayim.socketinterface.SocketMessage;
+import com.github.tjeukayim.socketinterface.SocketSender;
 import java.util.function.Consumer;
 import org.junit.jupiter.api.Test;
 
