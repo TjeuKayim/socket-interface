@@ -10,7 +10,7 @@ public class SocketReceiver {
   private final HashMap<String, Endpoint> endpoints = new HashMap<>();
   private final Object target;
 
-  public SocketReceiver(Class<?> clazz, Object target) {
+  public <T> SocketReceiver(Class<T> clazz, T target) {
     this.target = target;
     Method[] declaredMethods = clazz.getMethods();
     for (Method method : declaredMethods) {
