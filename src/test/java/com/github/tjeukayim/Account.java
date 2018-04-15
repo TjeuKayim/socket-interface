@@ -2,7 +2,7 @@ package com.github.tjeukayim;
 
 import java.util.Objects;
 
-public interface Account {
+interface Account {
   void login(Login f);
   void logout();
 

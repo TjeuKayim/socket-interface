@@ -61,6 +61,7 @@ public class SocketReceiver {
 
     Endpoint(Method factory) {
       this.factory = factory;
+      factory.setAccessible(true);
       for (Method method : factory.getReturnType().getMethods()) {
         parameterTypes.put(method.getName(), method.getParameterTypes());
       }

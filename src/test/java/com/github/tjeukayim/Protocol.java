@@ -3,7 +3,7 @@ package com.github.tjeukayim;
 /**
  * The interface used in unit-tests
  */
-public interface Protocol {
+interface Protocol {
 
   Account account();
 
