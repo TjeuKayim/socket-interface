@@ -74,6 +74,9 @@ public class SocketSender {
       if (method.getName().equals("hashCode")) {
         return hashCode();
       }
+      if (method.getName().equals("equals")) {
+        return false;
+      }
       return h.invoke(proxy, method, args);
     });
   }

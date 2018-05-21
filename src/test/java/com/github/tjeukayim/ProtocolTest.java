@@ -1,6 +1,10 @@
 package com.github.tjeukayim;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.tjeukayim.Account.Login;
 import com.github.tjeukayim.socketinterface.SocketMessage;
@@ -71,6 +75,31 @@ public final class ProtocolTest {
   void missingEndpoint() {
     protocolMock.account = null;
     assertThrows(IllegalStateException.class, () -> sender.account().logout());
+  }
+
+  @Test
+  void hashSender() {
+    Protocol a = createSender(protocolMock);
+    Protocol b = createSender(protocolMock);
+    int i = a.hashCode();
+    int j = b.hashCode();
+    assertNotEquals(i, j);
+  }
+
+  @Test
+  void hashEndpoint() {
+    Account a = createSender(protocolMock).account();
+    Account b = createSender(protocolMock).account();
+    int i = a.hashCode();
+    int j = b.hashCode();
+    assertNotEquals(i, j);
+  }
+
+  @Test
+  void callEquals() {
+    Protocol a = createSender(protocolMock);
+    Protocol b = createSender(protocolMock);
+    assertNotEquals(a, b);
   }
 
   private <T> Consumer<T> print(Consumer<T> consumer) {
