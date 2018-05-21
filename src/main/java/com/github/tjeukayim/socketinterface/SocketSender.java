@@ -26,10 +26,6 @@ public class SocketSender {
     return (T) sender.getProxy();
   }
 
-  private static Object interfaceProxy(Class c, InvocationHandler h) {
-    return Proxy.newProxyInstance(c.getClassLoader(), new Class[]{c}, h);
-  }
-
   /**
    * Each method of the interface clazz should have no arguments, and return another interface
    */
@@ -71,5 +67,14 @@ public class SocketSender {
         throw new IllegalArgumentException("return type should be void");
       }
     }
+  }
+
+  private Object interfaceProxy(Class c, InvocationHandler h) {
+    return Proxy.newProxyInstance(c.getClassLoader(), new Class[]{c}, (proxy, method, args) -> {
+      if (method.getName().equals("hashCode")) {
+        return hashCode();
+      }
+      return h.invoke(proxy, method, args);
+    });
   }
 }
