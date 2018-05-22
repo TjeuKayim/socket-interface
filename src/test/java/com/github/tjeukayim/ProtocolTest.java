@@ -105,6 +105,13 @@ public final class ProtocolTest {
   @Test
   void equalProtocols() {
     assertTrue(sender.equals(sender));
+    assertEquals(sender, sender);
+  }
+
+  @Test
+  void equalEndpoints() {
+    assertTrue(sender.chat().equals(sender.chat()));
+    assertEquals(sender.chat(), sender.chat());
   }
 
   private <T> Consumer<T> print(Consumer<T> consumer) {
