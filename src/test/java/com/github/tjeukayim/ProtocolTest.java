@@ -102,6 +102,11 @@ public final class ProtocolTest {
     assertNotEquals(a, b);
   }
 
+  @Test
+  void equalProtocols() {
+    assertTrue(sender.equals(sender));
+  }
+
   private <T> Consumer<T> print(Consumer<T> consumer) {
     return (T t) -> {
       System.out.println(gson.toJson(t));

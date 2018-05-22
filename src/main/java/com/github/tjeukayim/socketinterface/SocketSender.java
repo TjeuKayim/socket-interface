@@ -13,6 +13,8 @@ public class SocketSender {
   private final HashMap<String, Object> endpoints = new HashMap<>();
   private final Class clazz;
   private final Consumer<SocketMessage> messageConsumer;
+  private static final Method OBJECT_EQUALS = getObjectMethod("equals", Object.class);
+  private static final Method OBJECT_HASHCODE = getObjectMethod("hashCode");
 
   private SocketSender(Class clazz, Consumer<SocketMessage> messageConsumer) {
     this.clazz = clazz;
@@ -71,13 +73,27 @@ public class SocketSender {
 
   private Object interfaceProxy(Class c, InvocationHandler h) {
     return Proxy.newProxyInstance(c.getClassLoader(), new Class[]{c}, (proxy, method, args) -> {
-      if (method.getName().equals("hashCode")) {
+      if (OBJECT_HASHCODE.equals(method)) {
         return hashCode();
       }
-      if (method.getName().equals("equals")) {
-        return false;
+      if (OBJECT_EQUALS.equals(method)) {
+        return args[0] == proxy;
       }
       return h.invoke(proxy, method, args);
     });
+  }
+
+  /**
+   * Get a method-object from `Object`.
+   * <p>
+   * Source: https://javaclippings.wordpress.com/2009/03/18/dynamic-proxies-equals-hashcode-tostring/
+   * </p>
+   */
+  private static Method getObjectMethod(String name, Class... types) {
+    try {
+      return Object.class.getMethod(name, types);
+    } catch (NoSuchMethodException e) {
+      throw new IllegalArgumentException(e);
+    }
   }
 }
