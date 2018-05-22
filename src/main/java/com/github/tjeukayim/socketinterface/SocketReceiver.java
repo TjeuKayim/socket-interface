@@ -47,8 +47,10 @@ public class SocketReceiver {
           .getMethod(methodName, parameterTypes);
       method.setAccessible(true);
       method.invoke(implementation, arguments);
-    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+    } catch (IllegalAccessException | NoSuchMethodException e) {
       throw new IllegalArgumentException("invocation failed");
+    } catch (InvocationTargetException e) {
+      throw new IllegalStateException(e.getTargetException());
     } catch (NullPointerException e) {
       throw new IllegalStateException("call to " + message.getEndpoint() + " returned null");
     }
